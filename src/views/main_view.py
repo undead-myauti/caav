@@ -5,69 +5,58 @@ class View:
         self.controller = controller
 
         self.root = tkinter.Tk()
-        self.root.title("Gerador de Referências")
+        self.root.title("Financeiro turbinado")
 
-        self.firstContainer = tkinter.Frame(self.root)
-        self.secondContainer = tkinter.Frame(self.root)
-        self.thirdContainer = tkinter.Frame(self.root)
+        self.telas_container = tkinter.Frame(self.root, bg="#BDBDBD")
+        self.telas_container.pack(fill='both', expand=True)
+        self.create_frame_tela_renda(self.telas_container)
+        self.frame_tela_renda.grid(row=0, column=0, sticky='nsew')
 
-        self.firstContainer.pack()
-        self.secondContainer.pack()
-        self.thirdContainer.pack()
+        # self.main_screen_container = tkinter.Frame(self.root, bg="#BDBDBD")
+        # self.main_screen_container.pack(side=tkinter.RIGHT, fill='both', expand=True, padx=20, pady=20)
 
-        self.container(self.firstContainer)
-        self.container1(self.secondContainer)
-        self.container2(self.thirdContainer)
+        # self.renda_screen(self.main_screen_container)
+        # self.sidebar(self.sidebar_container)
+        # self.topbar(self.topbar_container)
 
-    def container(self, container):
-        self.labelNome = tkinter.Label(container, width=20, text="Nome:")
-        self.labelSobrenome = tkinter.Label(container, width=20, text="Sobrenome:")
-        self.labelAno = tkinter.Label(container, width=20, text="Ano:")
+    def create_frame_tela_renda(self, container):
+        self.frame_tela_renda = tkinter.Frame(container, bg="#B1B1B1")
+        self.frame_tela_renda.grid(row=0, column=0, sticky='nsew')
+        
+        self.label_renda = tkinter.Label(self.frame_tela_renda, width=80, text="Informe a renda mensal", font=("Arial", 20), bg="#B1B1B1")
+        self.entry_renda = tkinter.Entry(self.frame_tela_renda, width=80)
+        self.button_enviar = tkinter.Button(self.frame_tela_renda, text="Enviar", font=("Arial", 20), bg="white")
 
-        self.entryNome = tkinter.Entry(container, width=20)
-        self.entrySobrenome = tkinter.Entry(container, width=20)
-        self.entryAno = tkinter.Entry(container, width=20)
+        # Configurando o grid do frame
+        self.frame_tela_renda.grid_columnconfigure(0, weight=1)
+        self.frame_tela_renda.grid_rowconfigure(2, weight=1)
 
-        self.labelNome.pack()
-        self.entryNome.pack()
-        self.labelSobrenome.pack()
-        self.entrySobrenome.pack()
-        self.labelAno.pack()
-        self.entryAno.pack()
-    
-    def container1(self, container):
-        self.buttonRef = tkinter.Button(container, width=20, text="Gerar referência", command=self.call_update_reference)
-        self.buttonLimpar = tkinter.Button(container, width=20, text="Limpar dados", command=self.clear_entries)
+        # Posicionando os widgets usando grid
+        self.label_renda.grid(row=0, column=0, pady=10, padx=10)
+        self.entry_renda.grid(row=1, column=0, pady=10, padx=10)
+        self.button_enviar.grid(row=2, column=0, pady=10, padx=10)
 
-        self.buttonRef.pack()
-        self.buttonLimpar.pack()
+    # def render_screen(self, container):
+    #     self.create_frame()
+    #     pass
 
-    def container2(self, container):
-        self.labelRef = tkinter.Label(container, width=20, text="Referência:")
-        self.labelInfo = tkinter.Label(container, width=40, text="xxxxxx")
 
-        self.labelRef.pack()
-        self.labelInfo.pack()
+    def sidebar(self, container):
+        self.button_informar_renda = tkinter.Button(container, text="Informar renda")
+        self.button_informar_renda.pack(pady=10, padx=10, fill='x')
+        
+        self.button_adicionar_despesa = tkinter.Button(container, text="Adicionar despesa")
+        self.button_adicionar_despesa.pack(pady=10, padx=10, fill='x')
 
-    def update_reference(self, reference: str):
-        self.labelInfo['text'] = reference
+        self.button_atualizar_despesas = tkinter.Button(container, text="Atualizar despesas")
+        self.button_atualizar_despesas.pack(pady=10, padx=10, fill='x')
 
-    def call_update_reference(self):
-        reference = self.controller.clickViewReference()
-        self.update_reference(reference)
+        self.button_atualizar_renda = tkinter.Button(container, text="Atualizar renda")
+        self.button_atualizar_renda.pack(pady=10, padx=10, fill='x')
 
-    def get_reference(self):
-        return [
-            self.entryAno.get(),
-            self.entryNome.get(),
-            self.entrySobrenome.get()
-        ]
-
-    def clear_entries(self):
-        self.entryNome.delete(0, tkinter.END)
-        self.entrySobrenome.delete(0, tkinter.END)
-        self.entryAno.delete(0, tkinter.END)
-        self.labelInfo['text'] = "xxxxxx"
+    def topbar(self, container):
+        self.label_financeiro_turbinado = tkinter.Label(container, text="Financeiro Turbinado", font=("Arial", 40), bg="#BDBDBD")
+        self.label_financeiro_turbinado.pack(pady=10, padx=10, fill='x')
 
     def main_loop(self):
         self.root.mainloop()
