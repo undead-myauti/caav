@@ -11,7 +11,7 @@ class Controller:
             "inicio": "inicio",
             "informar_renda": "informar_renda",
             "adicionar_despesa": "adicionar_despesa",
-            "atualizar_despesas": "adicionar_despesa",  # Mesmo frame para adicionar e atualizar por enquanto
+            "atualizar_despesas": "atualizar_despesas",  # Mesmo frame para adicionar e atualizar por enquanto
             "atualizar_renda": "atualizar_renda"
         }
 

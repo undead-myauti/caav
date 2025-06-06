@@ -53,6 +53,12 @@ class View:
         self.frames["atualizar_renda"] = self.renda_view.create_frame_update_renda(self, self.telas_container)
         self.frames["atualizar_renda"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
 
+        self.frames["atualizar_despesas"] = self.despesa_view.create_frame_update_despesa(self, self.telas_container)
+        self.frames["atualizar_despesas"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
+
+        self.frames["inicio"] = self.renda_view.create_frame_tela_principal(self, self.telas_container)
+        self.frames["inicio"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
+
         self.topbar.create_topbar(self, self.topbar_container)
         self.sidebar.create_sidebar(self.sidebar_container, self.sidebar_commands())
 
