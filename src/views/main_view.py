@@ -1,62 +1,73 @@
 import tkinter
+from src.views.renda_view.view import RendaView
+from src.views.despesa_view.view import DespesaView
+from src.views.sidebar.sidebar import Sidebar
+from src.views.topbar.topbar import Topbar
 
 class View:
     def __init__(self, controller):
         self.controller = controller
+        self.renda_view = RendaView()
+        self.despesa_view = DespesaView()
+        self.sidebar = Sidebar()
+        self.topbar = Topbar()
+        self.frames = {}
 
         self.root = tkinter.Tk()
         self.root.title("Financeiro turbinado")
+        self.root.geometry("1000x600")
 
-        self.telas_container = tkinter.Frame(self.root, bg="#BDBDBD")
-        self.telas_container.pack(fill='both', expand=True)
-        self.create_frame_tela_renda(self.telas_container)
-        self.frame_tela_renda.grid(row=0, column=0, sticky='nsew')
+        ###### Topbar ######
+        self.topbar_container = tkinter.Frame(self.root, bg="#BDBDBD", height=80)
+        self.topbar_container.pack(side=tkinter.TOP, fill='x', padx=20, pady=(20, 0))
+        self.topbar_container.pack_propagate(False)
+        ###### Topbar ######
 
-        # self.main_screen_container = tkinter.Frame(self.root, bg="#BDBDBD")
-        # self.main_screen_container.pack(side=tkinter.RIGHT, fill='both', expand=True, padx=20, pady=20)
+        ###### Main Container ######
+        self.main_container = tkinter.Frame(self.root, bg="#D9D9D9")
+        self.main_container.pack(fill='both', expand=True, padx=20, pady=20)
+        ###### Main Container ######
 
-        # self.renda_screen(self.main_screen_container)
-        # self.sidebar(self.sidebar_container)
-        # self.topbar(self.topbar_container)
-
-    def create_frame_tela_renda(self, container):
-        self.frame_tela_renda = tkinter.Frame(container, bg="#B1B1B1")
-        self.frame_tela_renda.grid(row=0, column=0, sticky='nsew')
+        ###### Sidebar ######
+        self.sidebar_container = tkinter.Frame(self.main_container, bg="#BDBDBD", width=200)
+        self.sidebar_container.pack(side=tkinter.LEFT, fill='y')
+        self.sidebar_container.pack_propagate(False)
         
-        self.label_renda = tkinter.Label(self.frame_tela_renda, width=80, text="Informe a renda mensal", font=("Arial", 20), bg="#B1B1B1")
-        self.entry_renda = tkinter.Entry(self.frame_tela_renda, width=80)
-        self.button_enviar = tkinter.Button(self.frame_tela_renda, text="Enviar", font=("Arial", 20), bg="white")
+        self.telas_container = tkinter.Frame(self.main_container, bg="#BDBDBD")
+        self.telas_container.pack(side=tkinter.LEFT, fill='both', expand=True, padx=(20, 0))
+        ###### Sidebar ######
 
-        # Configurando o grid do frame
-        self.frame_tela_renda.grid_columnconfigure(0, weight=1)
-        self.frame_tela_renda.grid_rowconfigure(2, weight=1)
+        ###### Telas ######
+        self.telas_container.grid_columnconfigure(0, weight=1)
+        self.telas_container.grid_columnconfigure(2, weight=1)
+        self.telas_container.grid_rowconfigure(0, weight=1)
+        self.telas_container.grid_rowconfigure(2, weight=1)
+        ###### Telas ######
 
-        # Posicionando os widgets usando grid
-        self.label_renda.grid(row=0, column=0, pady=10, padx=10)
-        self.entry_renda.grid(row=1, column=0, pady=10, padx=10)
-        self.button_enviar.grid(row=2, column=0, pady=10, padx=10)
-
-    # def render_screen(self, container):
-    #     self.create_frame()
-    #     pass
-
-
-    def sidebar(self, container):
-        self.button_informar_renda = tkinter.Button(container, text="Informar renda")
-        self.button_informar_renda.pack(pady=10, padx=10, fill='x')
+        self.frames["informar_renda"] = self.renda_view.create_frame_tela_renda(self, self.telas_container)
+        self.frames["informar_renda"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
         
-        self.button_adicionar_despesa = tkinter.Button(container, text="Adicionar despesa")
-        self.button_adicionar_despesa.pack(pady=10, padx=10, fill='x')
+        self.frames["adicionar_despesa"] = self.despesa_view.create_frame_tela_despesa(self, self.telas_container)
+        self.frames["adicionar_despesa"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
+        
+        self.frames["atualizar_renda"] = self.renda_view.create_frame_update_renda(self, self.telas_container)
+        self.frames["atualizar_renda"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
 
-        self.button_atualizar_despesas = tkinter.Button(container, text="Atualizar despesas")
-        self.button_atualizar_despesas.pack(pady=10, padx=10, fill='x')
+        self.topbar.create_topbar(self, self.topbar_container)
+        self.sidebar.create_sidebar(self.sidebar_container, self.sidebar_commands())
 
-        self.button_atualizar_renda = tkinter.Button(container, text="Atualizar renda")
-        self.button_atualizar_renda.pack(pady=10, padx=10, fill='x')
-
-    def topbar(self, container):
-        self.label_financeiro_turbinado = tkinter.Label(container, text="Financeiro Turbinado", font=("Arial", 40), bg="#BDBDBD")
-        self.label_financeiro_turbinado.pack(pady=10, padx=10, fill='x')
+    def sidebar_commands(self):
+        return {
+            "Início": lambda: self.controller.handle_navigation("inicio"),    
+            "Informar renda": lambda: self.controller.handle_navigation("informar_renda"),
+            "Adicionar despesa": lambda: self.controller.handle_navigation("adicionar_despesa"),
+            "Atualizar despesas": lambda: self.controller.handle_navigation("atualizar_despesas"),
+            "Atualizar renda": lambda: self.controller.handle_navigation("atualizar_renda")
+        }
+    
+    def show_frame(self, frame_name):
+        if frame_name in self.frames:
+            self.frames[frame_name].tkraise()
 
     def main_loop(self):
         self.root.mainloop()
