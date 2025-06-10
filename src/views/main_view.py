@@ -8,7 +8,7 @@ class View:
     def __init__(self, controller):
         self.controller = controller
         self.renda_view = RendaView()
-        self.despesa_view = DespesaView()
+        self.despesa_view = DespesaView(controller=controller)
         self.sidebar = Sidebar()
         self.topbar = Topbar()
         self.frames = {}
@@ -70,7 +70,7 @@ class View:
             "Atualizar despesas": lambda: self.controller.handle_navigation("atualizar_despesas"),
             "Atualizar renda": lambda: self.controller.handle_navigation("atualizar_renda")
         }
-    
+
     def show_frame(self, frame_name):
         if frame_name in self.frames:
             self.frames[frame_name].tkraise()

@@ -1,30 +1,13 @@
 import tkinter
-from src.controllers.despesa_controller import DespesaController
 
 class DespesaView:
-    def __init__(self):
+    def __init__(self, controller=None):
         self.frame_tela_despesa = None
-        self.controller = DespesaController()
-        self.controller.set_view(self)
+        self.controller = controller
+        self.selected_expense_name = None
 
-        self.mock_despesa = [
-            {
-                "nome": "Aluguel",
-                "valor": 1000
-            }, 
-            {
-                "nome": "Giovana",
-                "valor": 1000
-            }, 
-            {
-                "nome": "Rafael",
-                "valor": 1000
-            },
-            {
-                "nome": "Rafael",
-                "valor": 1000
-            },
-        ]
+        self.expenses = self.controller.handle_get_expenses()
+        self.expenses_map = {expense.name: expense.id for expense in self.expenses}
         
     def create_frame_tela_despesa(self, main_view, container):
         self.frame_tela_despesa = tkinter.Frame(container, bg="#B1B1B1")
@@ -34,7 +17,14 @@ class DespesaView:
         self.entry_despesa = tkinter.Entry(self.frame_tela_despesa, width=80)
         self.label_valor_despesa = tkinter.Label(self.frame_tela_despesa, width=80, text="Informe o valor da despesa", font=("Arial", 20), bg="#B1B1B1")
         self.entry_valor_despesa = tkinter.Entry(self.frame_tela_despesa, width=80)
-        self.button_enviar = tkinter.Button(self.frame_tela_despesa, text="Enviar", font=("Arial", 20), bg="white")
+        self.button_enviar = tkinter.Button(
+            self.frame_tela_despesa, text="Enviar", 
+            font=("Arial", 20), bg="white", 
+            command=lambda: self.controller.register_expense(
+                self.entry_despesa.get(), 
+                self.entry_valor_despesa.get()
+            )
+        )
 
         self.frame_tela_despesa.grid_columnconfigure(0, weight=1)
         self.frame_tela_despesa.grid_rowconfigure(2, weight=1)
@@ -60,13 +50,13 @@ class DespesaView:
         for i in range(4):
             buttons_frame.grid_columnconfigure(i, weight=1)
 
-        for i, despesa in enumerate(self.mock_despesa):
+        for i, expense in enumerate(self.expenses):
             row = i // 4
             col = i % 4
             
             button = tkinter.Button(
                 buttons_frame, 
-                text=despesa["nome"],
+                text=expense.name,
                 font=("Arial", 12),
                 bg="white",
                 relief="solid",
