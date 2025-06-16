@@ -7,8 +7,8 @@ from src.views.topbar.topbar import Topbar
 class View:
     def __init__(self, controller):
         self.controller = controller
-        self.renda_view = RendaView()
-        self.despesa_view = DespesaView(controller=controller)
+        self.renda_view = RendaView(controller=self.controller)
+        self.despesa_view = DespesaView(controller=self.controller)
         self.sidebar = Sidebar()
         self.topbar = Topbar()
         self.frames = {}

@@ -6,7 +6,7 @@ class Controller:
         self.model = Model()
         self.view = View(controller=self)
         self.selected_button = None
-        
+
         self.navigation_map = {
             "inicio": "inicio",
             "informar_renda": "informar_renda",
@@ -18,9 +18,12 @@ class Controller:
     def set_view(self, view):
         self.view = view
 
-    def handle_button_click(self, button, id):
+    def handle_button_click(self, button):
         if self.selected_button:
             self.selected_button.configure(bg="white")
+            self.view.despesa_view.rebuild_initial_info()
+            self.view.renda_view.rebuild_initial_info()
+            self.view.show_frame("inicio")
         button.configure(bg="#808080")
         self.selected_button = button
 
@@ -34,11 +37,35 @@ class Controller:
                 "value": value
             }
         )
+        self.view.renda_view.rebuild_initial_info()
+        self.view.show_frame("inicio")
 
     def handle_navigation(self, action):
         if action in self.navigation_map:
             frame_to_show = self.navigation_map[action]
             self.view.show_frame(frame_to_show)
+
+    def handle_update_renda_click(self, value):
+        updated_income = self.model.update_income(value)
+        self.view.renda_view.rebuild_initial_info()
+        self.view.show_frame("inicio")
+        print(f"updated_income.value: {updated_income.value}")
+        print(f"self.view.renda_view.monthly_income: {self.view.renda_view.monthly_income}")
+
+    def get_annual_income(self):
+        return self.model.get_annual_income()
+
+    def get_monthly_income(self):
+        return self.model.get_monthly_income()
+
+    def get_monthly_expenses(self):
+        return self.model.get_monthly_expenses()
+
+    def get_highest_expense(self):
+        return self.model.get_highest_expense()
+
+    def get_remaining_income(self):
+        return self.model.get_remaining_income()  
 
     def run(self):
         self.view.main_loop()

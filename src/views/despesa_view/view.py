@@ -8,7 +8,7 @@ class DespesaView:
 
         self.expenses = self.controller.handle_get_expenses()
         self.expenses_map = {expense.name: expense.id for expense in self.expenses}
-        
+
     def create_frame_tela_despesa(self, main_view, container):
         self.frame_tela_despesa = tkinter.Frame(container, bg="#B1B1B1")
         self.frame_tela_despesa.grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
