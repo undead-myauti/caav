@@ -18,12 +18,12 @@ class Controller:
     def set_view(self, view):
         self.view = view
 
+    def format_currency(self, valor: float) -> str:
+        return f"{int(valor):,}".replace(",", ".")
+
     def handle_button_click(self, button):
         if self.selected_button:
             self.selected_button.configure(bg="white")
-            self.view.despesa_view.rebuild_initial_info()
-            self.view.renda_view.rebuild_initial_info()
-            self.view.show_frame("inicio")
         button.configure(bg="#808080")
         self.selected_button = button
 
@@ -49,8 +49,6 @@ class Controller:
         updated_income = self.model.update_income(value)
         self.view.renda_view.rebuild_initial_info()
         self.view.show_frame("inicio")
-        print(f"updated_income.value: {updated_income.value}")
-        print(f"self.view.renda_view.monthly_income: {self.view.renda_view.monthly_income}")
 
     def get_annual_income(self):
         return self.model.get_annual_income()

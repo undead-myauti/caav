@@ -18,22 +18,22 @@ class View:
         self.root.geometry("1000x600")
 
         ###### Topbar ######
-        self.topbar_container = tkinter.Frame(self.root, bg="#BDBDBD", height=80)
+        self.topbar_container = tkinter.Frame(self.root, bg="#BDBDBD", height=80, name="topbar_container")
         self.topbar_container.pack(side=tkinter.TOP, fill='x', padx=20, pady=(20, 0))
         self.topbar_container.pack_propagate(False)
         ###### Topbar ######
 
         ###### Main Container ######
-        self.main_container = tkinter.Frame(self.root, bg="#D9D9D9")
+        self.main_container = tkinter.Frame(self.root, bg="#D9D9D9", name="main_container")
         self.main_container.pack(fill='both', expand=True, padx=20, pady=20)
         ###### Main Container ######
 
         ###### Sidebar ######
-        self.sidebar_container = tkinter.Frame(self.main_container, bg="#BDBDBD", width=200)
+        self.sidebar_container = tkinter.Frame(self.main_container, bg="#BDBDBD", width=200, name="sidebar_container")
         self.sidebar_container.pack(side=tkinter.LEFT, fill='y')
         self.sidebar_container.pack_propagate(False)
-        
-        self.telas_container = tkinter.Frame(self.main_container, bg="#BDBDBD")
+
+        self.telas_container = tkinter.Frame(self.main_container, bg="#BDBDBD", name="telas_container")
         self.telas_container.pack(side=tkinter.LEFT, fill='both', expand=True, padx=(20, 0))
         ###### Sidebar ######
 
@@ -46,10 +46,10 @@ class View:
 
         self.frames["informar_renda"] = self.renda_view.create_frame_tela_renda(self, self.telas_container)
         self.frames["informar_renda"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
-        
+
         self.frames["adicionar_despesa"] = self.despesa_view.create_frame_tela_despesa(self, self.telas_container)
         self.frames["adicionar_despesa"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
-        
+
         self.frames["atualizar_renda"] = self.renda_view.create_frame_update_renda(self, self.telas_container)
         self.frames["atualizar_renda"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
 
@@ -62,6 +62,12 @@ class View:
         self.topbar.create_topbar(self, self.topbar_container)
         self.sidebar.create_sidebar(self.sidebar_container, self.sidebar_commands())
 
+    def rebuild_update_despesa_frame(self):
+        self.frames["atualizar_despesas"].destroy()
+        self.despesa_view.update_expenses()
+        self.frames["atualizar_despesas"] = self.despesa_view.create_frame_update_despesa(self, self.telas_container)
+        self.frames["atualizar_despesas"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
+
     def sidebar_commands(self):
         return {
             "Início": lambda: self.controller.handle_navigation("inicio"),    
@@ -73,6 +79,8 @@ class View:
 
     def show_frame(self, frame_name):
         if frame_name in self.frames:
+            if frame_name == "atualizar_despesas":
+                self.rebuild_update_despesa_frame()
             self.frames[frame_name].tkraise()
 
     def main_loop(self):

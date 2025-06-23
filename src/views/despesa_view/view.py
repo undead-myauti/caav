@@ -9,10 +9,14 @@ class DespesaView:
         self.expenses = self.controller.handle_get_expenses()
         self.expenses_map = {expense.name: expense.id for expense in self.expenses}
 
+    def update_expenses(self):
+        self.expenses = self.controller.handle_get_expenses()
+        self.expenses_map = {expense.name: expense.id for expense in self.expenses}
+
     def create_frame_tela_despesa(self, main_view, container):
-        self.frame_tela_despesa = tkinter.Frame(container, bg="#B1B1B1")
+        self.frame_tela_despesa = tkinter.Frame(container, bg="#B1B1B1", name="frame_tela_despesa")
         self.frame_tela_despesa.grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
-        
+
         self.label_despesa = tkinter.Label(self.frame_tela_despesa, width=80, text="Informe a despesa", font=("Arial", 20), bg="#B1B1B1")
         self.entry_despesa = tkinter.Entry(self.frame_tela_despesa, width=80)
         self.label_valor_despesa = tkinter.Label(self.frame_tela_despesa, width=80, text="Informe o valor da despesa", font=("Arial", 20), bg="#B1B1B1")
@@ -38,13 +42,13 @@ class DespesaView:
         return self.frame_tela_despesa
     
     def create_frame_update_despesa(self, main_view, container):
-        self.frame_tela_despesa = tkinter.Frame(container, bg="#B1B1B1")
-        self.frame_tela_despesa.grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
+        self.frame_tela_update_despesa = tkinter.Frame(container, bg="#B1B1B1", name="frame_tela_update_despesa")
+        self.frame_tela_update_despesa.grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
 
-        main_container = tkinter.Frame(self.frame_tela_despesa, bg="#B1B1B1")
+        main_container = tkinter.Frame(self.frame_tela_update_despesa, bg="#B1B1B1", name="main_container")
         main_container.pack(fill='both', expand=True, padx=10, pady=10)
 
-        buttons_frame = tkinter.Frame(main_container, bg="#B1B1B1")
+        buttons_frame = tkinter.Frame(main_container, bg="#B1B1B1", name="buttons_frame")
         buttons_frame.pack(fill='both', expand=True)
 
         for i in range(4):
@@ -60,12 +64,13 @@ class DespesaView:
                 font=("Arial", 12),
                 bg="white",
                 relief="solid",
-                width=15
+                width=15,
+                name=f"{expense.id}"
             )
             button.configure(command=lambda b=button: self.controller.handle_button_click(b))
             button.grid(row=row, column=col, padx=5, pady=5, sticky='ew')
 
-        edit_frame = tkinter.Frame(self.frame_tela_despesa, bg="#B1B1B1")
+        edit_frame = tkinter.Frame(self.frame_tela_update_despesa, bg="#B1B1B1", name="edit_frame")
         edit_frame.pack(side='bottom', fill='x', pady=20)
 
         edit_button = tkinter.Button(
@@ -78,4 +83,4 @@ class DespesaView:
         )
         edit_button.pack(pady=5)
 
-        return self.frame_tela_despesa
+        return self.frame_tela_update_despesa
