@@ -25,7 +25,15 @@ class Controller:
         if self.selected_button:
             self.selected_button.configure(bg="white")
         button.configure(bg="#808080")
+        self.view.rebuild_update_despesa_edit_frame()
+        self.view.despesa_view.selected_expense = int(button._name)
+        self.view.show_frame("atualizar_despesa_edit")
         self.selected_button = button
+
+    def handle_update_expense(self, expense, name, value):
+        self.model.update_expense(expense, name, value)
+        self.view.renda_view.rebuild_initial_info()
+        self.view.show_frame("atualizar_despesas")
 
     def handle_get_expenses(self):
         return self.model.get_expenses()
@@ -64,6 +72,9 @@ class Controller:
 
     def get_remaining_income(self):
         return self.model.get_remaining_income()  
+
+    def get_expense_by_id(self, id):
+        return self.model.get_expense_by_id(id)
 
     def run(self):
         self.view.main_loop()

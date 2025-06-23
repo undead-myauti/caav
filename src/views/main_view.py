@@ -44,6 +44,9 @@ class View:
         self.telas_container.grid_rowconfigure(2, weight=1)
         ###### Telas ######
 
+        self.frames["atualizar_despesa_edit"] = self.despesa_view.create_frame_update_despesa_edit(self, self.telas_container)
+        self.frames["atualizar_despesa_edit"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
+
         self.frames["informar_renda"] = self.renda_view.create_frame_tela_renda(self, self.telas_container)
         self.frames["informar_renda"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
 
@@ -68,6 +71,11 @@ class View:
         self.frames["atualizar_despesas"] = self.despesa_view.create_frame_update_despesa(self, self.telas_container)
         self.frames["atualizar_despesas"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
 
+    def rebuild_update_despesa_edit_frame(self):
+        self.frames["atualizar_despesa_edit"].destroy()
+        self.frames["atualizar_despesa_edit"] = self.despesa_view.create_frame_update_despesa_edit(self, self.telas_container)
+        self.frames["atualizar_despesa_edit"].grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
+
     def sidebar_commands(self):
         return {
             "Início": lambda: self.controller.handle_navigation("inicio"),    
@@ -81,6 +89,8 @@ class View:
         if frame_name in self.frames:
             if frame_name == "atualizar_despesas":
                 self.rebuild_update_despesa_frame()
+            if frame_name == "atualizar_despesa_edit":
+                self.rebuild_update_despesa_edit_frame()
             self.frames[frame_name].tkraise()
 
     def main_loop(self):

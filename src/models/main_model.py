@@ -15,6 +15,13 @@ class Model():
         finally:
             self.db.close()
 
+    def get_expense_by_id(self, id: int) -> Expense:
+        try:
+            expense = self.db.query(Expense).filter(Expense.id == id).first()
+            return expense
+        finally:
+            self.db.close()
+
     def add_expense(self, data: Dict) -> Expense:
         expense = Expense(
             name=data["name"],
@@ -22,6 +29,14 @@ class Model():
         )
 
         self.db.add(expense)
+        self.db.commit()
+        self.db.refresh(expense)
+        return expense
+
+    def update_expense(self, id: int, name: str, value: float) -> Expense:
+        expense = self.db.query(Expense).filter(Expense.id == id).first()
+        expense.name = name
+        expense.value = value
         self.db.commit()
         self.db.refresh(expense)
         return expense

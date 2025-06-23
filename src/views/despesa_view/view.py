@@ -4,7 +4,8 @@ class DespesaView:
     def __init__(self, controller=None):
         self.frame_tela_despesa = None
         self.controller = controller
-        self.selected_expense_name = None
+        self.selected_expense = None
+
 
         self.expenses = self.controller.handle_get_expenses()
         self.expenses_map = {expense.name: expense.id for expense in self.expenses}
@@ -84,3 +85,30 @@ class DespesaView:
         edit_button.pack(pady=5)
 
         return self.frame_tela_update_despesa
+
+
+    def create_frame_update_despesa_edit(self, main_view, container):
+        self.frame_tela_update_despesa_edit = tkinter.Frame(container, bg="#B1B1B1", name="frame_tela_update_despesa_edit")
+        self.frame_tela_update_despesa_edit.grid(row=1, column=1, sticky='nsew', padx=20, pady=20)
+
+        self.label_despesa_edit = tkinter.Label(self.frame_tela_update_despesa_edit, width=80, text="Informe o novo nome da despesa", font=("Arial", 20), bg="#B1B1B1")
+        self.entry_despesa_edit = tkinter.Entry(self.frame_tela_update_despesa_edit, width=80)
+        self.label_valor_despesa_edit = tkinter.Label(self.frame_tela_update_despesa_edit, width=80, text="Informe o novo valor da despesa", font=("Arial", 20), bg="#B1B1B1")
+        self.entry_valor_despesa_edit = tkinter.Entry(self.frame_tela_update_despesa_edit, width=80)
+        self.button_enviar_edit = tkinter.Button(self.frame_tela_update_despesa_edit, text="Atualizar", font=("Arial", 20), bg="white", command=lambda: self.controller.handle_update_expense(self.selected_expense, self.entry_despesa_edit.get(), self.entry_valor_despesa_edit.get()))
+
+        if self.selected_expense:
+            expense = self.controller.get_expense_by_id(self.selected_expense)
+            self.entry_despesa_edit.insert(0, f"{expense.name}")
+            self.entry_valor_despesa_edit.insert(0, f"{expense.value}")
+
+        self.frame_tela_update_despesa_edit.grid_columnconfigure(0, weight=1)
+        self.frame_tela_update_despesa_edit.grid_rowconfigure(2, weight=1)
+
+        self.label_despesa_edit.grid(row=0, column=0, pady=10, padx=10)
+        self.entry_despesa_edit.grid(row=1, column=0, pady=10, padx=10)
+        self.label_valor_despesa_edit.grid(row=2, column=0, pady=10, padx=10)
+        self.entry_valor_despesa_edit.grid(row=3, column=0, pady=10, padx=10)
+        self.button_enviar_edit.grid(row=4, column=0, pady=10, padx=10)
+
+        return self.frame_tela_update_despesa_edit
